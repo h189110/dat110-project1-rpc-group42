@@ -6,7 +6,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
-import no.hvl.dat110.TODO;
 
 
 public class MessageConnection {
@@ -23,7 +22,7 @@ public class MessageConnection {
 
 			outStream = new DataOutputStream(socket.getOutputStream());
 
-			inStream = new DataInputStream (socket.getInputStream());
+			inStream = new DataInputStream(socket.getInputStream());
 
 		} catch (IOException ex) {
 
@@ -34,32 +33,32 @@ public class MessageConnection {
 
 	public void send(Message message) {
 
-		byte[] data;
+		byte[] data = MessageUtils.encapsulate(message);
 		
-		// TODO - START
-		// encapsulate the data contained in the Message and write to the output stream
-		
-		if (true)
-			throw new UnsupportedOperationException(TODO.method());
-			
-		// TODO - END
+		try {
+			outStream.write(data);
+			outStream.flush();
+		} catch (IOException e) {
+            System.out.println("outStream failed" + e.getMessage());
+        }
 
-	}
+    }
 
 	public Message receive() {
 
 		Message message = null;
-		byte[] data;
+		byte[] data = new byte[MessageUtils.SEGMENTSIZE];
 		
-		// TODO - START
-		// read a segment from the input stream and decapsulate data into a Message
-		
-		if (true)
-			throw new UnsupportedOperationException(TODO.method());
-		
-		// TODO - END
-		
-		return message;
+		try {
+			int read = inStream.read(data, 0, MessageUtils.SEGMENTSIZE);
+
+			message = MessageUtils.decapsulate(data);
+
+		} catch (IOException e) {
+            System.out.println("inStream failure" + e.getMessage()); //størrelse større enn 128 probably
+        }
+
+        return message;
 		
 	}
 
