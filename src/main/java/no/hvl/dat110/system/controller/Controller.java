@@ -8,7 +8,7 @@ public class Controller  {
 	
 	private static int N = 5;
 	
-	public static void main (String[] args) {
+	public static void main (String[] args) throws InterruptedException {
 		
 		DisplayStub display;
 		SensorStub sensor;
@@ -24,17 +24,26 @@ public class Controller  {
 		// setup stop methods in the RPC middleware
 		RPCClientStopStub stopdisplay = new RPCClientStopStub(displayclient);
 		RPCClientStopStub stopsensor = new RPCClientStopStub(sensorclient);
-				
-		// TODO - START
+
+		display = new DisplayStub(displayclient);
+		sensor = new SensorStub(sensorclient);
+
+		displayclient.connect();
+		sensorclient.connect();
+
+		for (int i = 0; i < N; i++) {
+			int val = sensor.read();
+			display.write(String.valueOf(val));
+			Thread.sleep(2000);
+		}
+
+
 		
-		// create local display and sensor stub objects
-		// connect to sensor and display RPC servers - using the RPCClients
-		// read value from sensor using RPC and write to display using RPC
+		// create local display and sensor stub objects x
+		// connect to sensor and display RPC servers - using the RPCClients x
+		// read value from sensor using RPC and write to display using RPC x
 			
-		if (true)
-			throw new UnsupportedOperationException(TODO.method());
-		
-		// TODO - END
+
 		
 		stopdisplay.stop();
 		stopsensor.stop();
